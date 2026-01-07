@@ -20,7 +20,7 @@ def analyze_text(text):
     system_prompt = """
     You are a legal assistant. Your task is to analyze the provided text (a transcription of a legal complaint/denuncia).
     1. Extract the most important keywords (entities, crimes, locations, names).
-    2. Write a concise summary of the complaint.
+    2. Write a concise summary of the complaint IN SPANISH.
     3. Categorize the complaint into ONE of the following categories: 
        ['Robo', 'Violencia de Género', 'Estafa', 'Narcotráfico', 'Homicidio', 'Amenazas', 'Accidente de Tránsito', 'Otros'].
     

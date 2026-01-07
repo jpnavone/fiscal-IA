@@ -130,13 +130,16 @@ with tab2:
         recent = get_all_denuncias()
         if recent:
             for item in recent[:5]:
-                with st.container():
-                    icon = "📄"
-                    if item.file_type == 'audio': icon = "🎙️"
-                    elif item.file_type == 'image': icon = "🖼️"
-                    
-                    st.markdown(f"**{item.timestamp.strftime('%Y-%m-%d %H:%M')}** {icon} {item.filename} ({item.category})")
-                    st.write(f"{item.summary[:100]}...")
-                    st.divider()
+                icon = "📄"
+                if item.file_type == 'audio': icon = "🎙️"
+                elif item.file_type == 'image': icon = "🖼️"
+                
+                with st.expander(f"{icon} {item.timestamp.strftime('%Y-%m-%d %H:%M')} - {item.filename} ({item.category})"):
+                    st.markdown(f"**Resumen:**")
+                    st.write(item.summary)
+                    st.markdown(f"**Keywords:**")
+                    st.info(f"{item.keywords}")
+                    st.markdown("**Transcripción:**")
+                    st.text_area("Contenido", item.transcript, height=150, key=f"trans_{item.id}")
         else:
             st.info("Aún no hay evidencia cargada.")
