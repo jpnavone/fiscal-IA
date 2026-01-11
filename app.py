@@ -33,11 +33,21 @@ tab1, tab2 = st.tabs(["📂 Ingesta de Evidencia", "🔍 Búsqueda Inteligente"]
 
 with tab1:
     st.header("Subir Evidencia")
-    st.markdown("Soporta: Audio (mp3, wav), Documentos (pdf, docx) e Imágenes (jpg, png).")
+    # Check Image Upload Feature Flag
+    enable_image_upload = os.getenv("ENABLE_IMAGE_UPLOAD", "false").lower() == "true"
+    
+    allowed_types = ['mp3', 'wav', 'm4a', 'ogg', 'pdf', 'docx']
+    supported_text = "Soporta: Audio (mp3, wav) y Documentos (pdf, docx)."
+    
+    if enable_image_upload:
+        allowed_types.extend(['jpg', 'jpeg', 'png'])
+        supported_text = "Soporta: Audio (mp3, wav), Documentos (pdf, docx) e Imágenes (jpg, png)."
+
+    st.markdown(supported_text)
     
     uploaded_files = st.file_uploader(
         "Arrastra tus archivos aquí", 
-        type=['mp3', 'wav', 'm4a', 'ogg', 'pdf', 'docx', 'jpg', 'jpeg', 'png'],
+        type=allowed_types,
         accept_multiple_files=True
     )
     
@@ -58,6 +68,9 @@ with tab1:
                     elif file_ext == 'docx':
                         file_type = 'docx'
                     elif file_ext in ['jpg', 'jpeg', 'png']:
+                        if not enable_image_upload:
+                            st.error(f"❌ La subida de imágenes está deshabilitada. Archivo omitido: {uploaded_file.name}")
+                            continue
                         file_type = 'image'
                     else:
                         file_type = 'unknown'
